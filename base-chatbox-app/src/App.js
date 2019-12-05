@@ -53,7 +53,7 @@ isUser = pseudo => pseudo === this.state.pseudo // fonction iseur qui prend en p
     const messages = Object
     .keys(this.state.messages)
     .map(key => (
-      <CSSTransition timeout={2000} classNames="fade"  key ={key}>
+      <CSSTransition timeout={200} classNames="fade"  key ={key}>
         <Message        
           isUser = {this.isUser} 
           pseudo={this.state.messages[key].pseudo}
@@ -64,11 +64,11 @@ isUser = pseudo => pseudo === this.state.pseudo // fonction iseur qui prend en p
 
     return (
       <div className='box'>
-          <TransitionGroup className="messages" ref={this.messagesRef}> {/** mise en place d'une reference sur la partie qui affiche les messages*/}
-             <div className = "message">
+          <div className="messages" ref={this.messagesRef}> {/** mise en place d'une reference sur la partie qui affiche les messages*/}
+             <TransitionGroup className = "message">
                {messages}
-             </div>
-          </TransitionGroup>
+             </TransitionGroup>
+          </div>
 
         <Formulaire length={150} addMessage={this.addMessage} pseudo={this.state.pseudo}></Formulaire>
       </div>

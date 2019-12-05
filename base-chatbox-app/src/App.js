@@ -29,6 +29,17 @@ componentDidUpdate (){
 addMessage = message =>{
   const messages = {...this.state.messages}
   messages[`message-${Date.now()}`] = message
+  
+  //limiter les messages a 10 dans mon states et donc aussi dans firebase vu qu'ils sont syncronisé
+  Object
+  .keys(messages)
+  .slice(0, -10) //permet de mettre des borne
+  .forEach(key => { //cette boucle permet de mettre une valeur null a tout ce qui est en dehors des bornes
+    messages[key] = null
+  }) 
+
+
+
   this.setState({messages})
 }
 

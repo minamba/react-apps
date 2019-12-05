@@ -1,10 +1,14 @@
 import React, { Component, createRef } from 'react'
 import './App.css'
+import './animations.css'
 import Formulaire from "./components/Formulaire"
 import Message from "./components/Message"
 
 //Firebase
 import base from "./components/base"
+
+// Animations
+import {CSSTransition,TransitionGroup} from "react-transition-group"
 
 class App extends Component {
 
@@ -17,7 +21,7 @@ messagesRef = createRef(); //initialisation d'une ref qui va me permettre d'avoi
 
 //permet d'ajouter et charger les messages sur firebase. il est appelé une fois a l'initialisation de l'app ou au rechargement de la page
 componentDidMount (){
-  base.syncState('/',{context:this,state: 'messages'})
+  base.syncState('/',{context:this, state:'messages'})
 }
 
 //permet de voir si le state est mis à jour. il est appelé a chaque fois que le state change
@@ -43,25 +47,29 @@ addMessage = message =>{
   this.setState({messages})
 }
 
+isUser = pseudo => pseudo === this.state.pseudo // fonction iseur qui prend en param pseudo et on lui affecte le current user. donc isuser retourne le current user
+
   render () {
     const messages = Object
     .keys(this.state.messages)
     .map(key => (
-      <Message
-        key ={key} 
-        pseudo={this.state.messages[key].pseudo}
-        message={this.state.messages[key].message} />
+      <CSSTransition timeout={2000} classNames="fade"  key ={key}>
+        <Message        
+          isUser = {this.isUser} 
+          pseudo={this.state.messages[key].pseudo}
+          message={this.state.messages[key].message} />
+      </CSSTransition>
+
     ))
 
     return (
       <div className='box'>
-        <div>
-          <div className="messages" ref={this.messagesRef}> {/** mise en place d'une reference sur la partie qui affiche les messages*/}
+          <TransitionGroup className="messages" ref={this.messagesRef}> {/** mise en place d'une reference sur la partie qui affiche les messages*/}
              <div className = "message">
                {messages}
              </div>
-          </div>
-        </div>
+          </TransitionGroup>
+
         <Formulaire length={150} addMessage={this.addMessage} pseudo={this.state.pseudo}></Formulaire>
       </div>
     )
